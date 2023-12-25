@@ -52,6 +52,7 @@ void merge(void *v, size_t l , size_t m, size_t r, size_t mem_size, int (*comp)(
             memcpy((char*)v + (k++ * mem_size), R + (j++ * mem_size), mem_size);
         }
     }
+    // Copy left over values into original array
     while(i < n1) {
         memcpy((char*)v + (k++ * mem_size), L + (i++ * mem_size), mem_size);
     }
@@ -105,24 +106,35 @@ void swap(void* v1, void* v2, size_t size){
     6. quick sort on range from left to swap_ptr-1 and swap_ptr+1 to right.
 **/
 void quick_sort(void *v, size_t mem_size, size_t left, size_t right, int (*comp)(void*, void*)){
+    // if right is smaller than or equals to left, then return
     if(right <= left) return;
+    // find pivot
     size_t pivot = ((left+right)/2);
-    // swap pivot with high on the right
+    // swap pivot with the value in arr[right]
     char* vp = (char*)(v + pivot * mem_size);
     char* vr = (char*)(v + right * mem_size);
     swap(vp, vr, mem_size);
     size_t swap_ptr = left;
     char* curr;
-    for(size_t i = left; i < right; i++){
+
+    // iterate from left to right-1
+    size_t i = left;
+    while (i < right){
         curr = (char*)(v + (i * mem_size));
+        // if it should be smaller then swap arr[i] and arr[swap_ptr]
         if(comp(curr, vr)){
             char* to_swap = (char*)(v + (swap_ptr * mem_size)); 
             swap(curr, to_swap, mem_size);
             swap_ptr++;
         } 
+        // swap_ptr gets left behind at values that should be after mid
+        i++;
     } 
+    // swap partition value to rightful place
     char* to_swap = (char*)(v + (swap_ptr * mem_size)); 
     swap(vr, to_swap, mem_size);
+    // quick sort from left to swap_ptr-1 and swap_ptr+1 to right
+    // swap_ptr is the new position of the partition value
     quick_sort(v, mem_size, left, swap_ptr-1, comp);
     quick_sort(v, mem_size, swap_ptr+1, right, comp);
 }
