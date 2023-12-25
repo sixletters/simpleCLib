@@ -7,8 +7,18 @@ void sort(int* arr){
 };
 
 void merge(void *v, size_t l , size_t m, size_t r, size_t mem_size, int (*comp)(void*, void*));
-// Generic implementation of merge sort in C, takes in a comparator function
-// comparator should return true if first element should be before second element
+
+
+/**
+    Generic implementation of merge sort in c, takes in a comparator function
+    The quick sort implementation is as follows
+    4,8,3,6,1,2
+    1. Create and populate two arrays from left to mid and mid+1 to right
+    2. if right > left: continue, else return
+    2. merge sort from left to mid and mid+1 to right
+    3. Merge
+        Iterate through using 2 pointers, and overwrite value of original arr
+**/
 void merge_sort(void *v, size_t mem_size, size_t left, size_t right, int (*comp)(void*, void*)){
     size_t mid = (left + right ) / 2;
     // info("mid is %zu", mid);
@@ -22,21 +32,6 @@ void merge_sort(void *v, size_t mem_size, size_t left, size_t right, int (*comp)
     }
 }
 
-int int_compare(void* ele1, void* ele2) {
-        // casting s1 to int* so it can be 
-    // copied in variable a. 
-    int *a = (int*)ele1; 
-    int *b = (int*)ele2; 
-    return *a < *b;
-}
-
-int str_compare(void* ele1, void* ele2) {
-    char *a1 = *(char**)ele1;
-    char *a2 = *(char**)ele2; 
-    return strcmp(a1, a2);  
-}
-
-// comparator should return true if first element should be before second element
 void merge(void *v, size_t l , size_t m, size_t r, size_t mem_size, int (*comp)(void*, void*)) {
     size_t n1 = m - l + 1;
     size_t n2 = r - m;
@@ -66,6 +61,20 @@ void merge(void *v, size_t l , size_t m, size_t r, size_t mem_size, int (*comp)(
     }
 }
 
+int int_compare(void* ele1, void* ele2) {
+        // casting s1 to int* so it can be 
+    // copied in variable a. 
+    int *a = (int*)ele1; 
+    int *b = (int*)ele2; 
+    return *a < *b;
+}
+
+int str_compare(void* ele1, void* ele2) {
+    char *a1 = *(char**)ele1;
+    char *a2 = *(char**)ele2; 
+    return strcmp(a1, a2);  
+}
+
 void swap(void* v1, void* v2, size_t size){
 
     // Buffer is an array of characters that stores elements
@@ -78,7 +87,23 @@ void swap(void* v1, void* v2, size_t size){
     memcpy(v2, buffer, size);
 }
 
-// Generic implementation of quick sort in C, takes in a comparator function
+/**
+    Generic implementation of quick sort in C, takes in a comparator function
+    The quick sort implementation is as follows
+    4,8,3,6,1,2
+    1. Choose partition ( this implementation uses the mid index as partition ), 3 is the partition.
+    2. Swap arr[partition] and arr[right]. swap 3 and 2 -> 4,8,2,6,1,3.
+    3. Init a swap ptr = left.
+    4. Iterate from i = 0 till i = right -1,
+        (This works because, for cases where i == swap_ptr, it will get swapped with itself
+        For cases where arr[i] > mid: 
+            while i increases, the swap_ptr will get left behind at the index that is bigger than partition)
+        if arr[i] < mid:
+            swap arr[i] and arr[swap_ptr]
+            swap_ptr++
+    5. Swap back the arr[right] and arr[swap_ptr].
+    6. quick sort on range from left to swap_ptr-1 and swap_ptr+1 to right.
+**/
 void quick_sort(void *v, size_t mem_size, size_t left, size_t right, int (*comp)(void*, void*)){
     if(right <= left) return;
     size_t pivot = ((left+right)/2);
