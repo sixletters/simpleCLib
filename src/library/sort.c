@@ -22,12 +22,18 @@ void merge_sort(void *v, size_t mem_size, size_t left, size_t right, int (*comp)
     }
 }
 
-int int_compare(int* ele1, int* ele2) {
-    return *ele1 < *ele2;
+int int_compare(void* ele1, void* ele2) {
+        // casting s1 to int* so it can be 
+    // copied in variable a. 
+    int *a = (int*)ele1; 
+    int *b = (int*)ele2; 
+    return *a < *b;
 }
 
-int str_compare(char* ele1, char* ele2) {
-    return *ele1 < *ele2;
+int str_compare(void* ele1, void* ele2) {
+    char *a1 = *(char**)ele1;
+    char *a2 = *(char**)ele2; 
+    return strcmp(a1, a2);  
 }
 
 // comparator should return true if first element should be before second element
@@ -60,7 +66,7 @@ void merge(void *v, size_t l , size_t m, size_t r, size_t mem_size, int (*comp)(
     }
 }
 
-void swap(void* v1, void* v2, int size){
+void swap(void* v1, void* v2, size_t size){
 
     // Buffer is an array of characters that stores elements
     // byte by byte
@@ -73,6 +79,25 @@ void swap(void* v1, void* v2, int size){
 }
 
 // Generic implementation of quick sort in C, takes in a comparator function
-void quick_sort(void *v, size_t size, size_t left, size_t right, int (*comp)(void*, void*)){
-
+void quick_sort(void *v, size_t mem_size, size_t left, size_t right, int (*comp)(void*, void*)){
+    if(right <= left) return;
+    size_t pivot = ((left+right)/2);
+    // swap pivot with high on the right
+    char* vp = (char*)(v + pivot * mem_size);
+    char* vr = (char*)(v + right * mem_size);
+    swap(vp, vr, mem_size);
+    size_t swap_ptr = left;
+    char* curr;
+    for(size_t i = left; i < right; i++){
+        curr = (char*)(v + (i * mem_size));
+        if(comp(curr, vr)){
+            char* to_swap = (char*)(v + (swap_ptr * mem_size)); 
+            swap(curr, to_swap, mem_size);
+            swap_ptr++;
+        } 
+    } 
+    char* to_swap = (char*)(v + (swap_ptr * mem_size)); 
+    swap(vr, to_swap, mem_size);
+    quick_sort(v, mem_size, left, swap_ptr-1, comp);
+    quick_sort(v, mem_size, swap_ptr+1, right, comp);
 }

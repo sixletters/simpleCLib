@@ -19,7 +19,8 @@ int main(void) {
     int (*comparator)(void *, void *) = (int (*)(void *, void *))&int_compare;
     int arr[6] = {4,8,3,6,1,2};
     
-    merge_sort(arr, sizeof(int),0,  5, comparator);
+    quick_sort(arr, sizeof(int),0,5, comparator);
+    // merge_sort(arr, sizeof(int),0,  5, comparator);
     for (size_t i = 0; i <= 5; ++i) {
         info("element is %d", arr[i]);
     };
