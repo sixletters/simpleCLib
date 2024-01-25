@@ -36,3 +36,6 @@ $(LIBRARY):	$(LIB_OBJS)
 $(ENTRY): $(ENTRY_OBJS) $(LIBRARY)
 	@echo "Linking $@ with $^"
 	@$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+
+# gcc -S main.c to produce assembly code 

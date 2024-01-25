@@ -11,7 +11,7 @@ void merge(void *v, size_t l , size_t m, size_t r, size_t mem_size, int (*comp)(
 
 /**
     Generic implementation of merge sort in c, takes in a comparator function
-    The quick sort implementation is as follows
+    The merge sort implementation is as follows
     4,8,3,6,1,2
     1. Create and populate two arrays from left to mid and mid+1 to right
     2. if right > left: continue, else return
@@ -63,7 +63,7 @@ void merge(void *v, size_t l , size_t m, size_t r, size_t mem_size, int (*comp)(
 }
 
 int int_compare(void* ele1, void* ele2) {
-        // casting s1 to int* so it can be 
+    // casting s1 to int* so it can be 
     // copied in variable a. 
     int *a = (int*)ele1; 
     int *b = (int*)ele2; 
@@ -77,7 +77,6 @@ int str_compare(void* ele1, void* ele2) {
 }
 
 void swap(void* v1, void* v2, size_t size){
-
     // Buffer is an array of characters that stores elements
     // byte by byte
     char buffer[size];
@@ -137,4 +136,28 @@ void quick_sort(void *v, size_t mem_size, size_t left, size_t right, int (*comp)
     // swap_ptr is the new position of the partition value
     quick_sort(v, mem_size, left, swap_ptr-1, comp);
     quick_sort(v, mem_size, swap_ptr+1, right, comp);
+}
+
+/**
+    Generic implementation of insertion sort in C. Insertion sort algortihm can be thought of like this
+    imagine an element K of index i an arr, we can assume that arr[0.... i-1] is already is in sorted order,
+    we simply have to find the correct place to insert this element K, it can be done by saving a copy of K and then moving all elements
+    that should be after it one position forward, when we reach an element that is smaller or equal than it, we know that K should be one after it.
+    1. Iterate from 1 to n as i
+    2. store curr = arr[i]
+    3. j = i - 1
+    4. while j >= 0 and arr[j] > curr
+        4.1 swap arr[j] and arr[j+1] (this will be curr, for the first iteration)
+        4.2 j -=1
+**/
+void insertion_sort(void *v, size_t mem_size, size_t n,  int (*comp)(void*, void*)){
+    for(size_t i = 1; i < n; i ++){
+        char curr[mem_size];
+        memcpy(curr, (v + (i*mem_size)), mem_size);
+        int j = i - 1;
+        while(j >= 0 && comp(curr, (v + (j*mem_size)))){
+            swap(v+((j+1)*mem_size), v+(j*mem_size), mem_size);
+            j -= 1;
+        }
+    }
 }
