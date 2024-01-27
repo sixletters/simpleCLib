@@ -134,7 +134,9 @@ void quick_sort(void *v, size_t mem_size, size_t left, size_t right, int (*comp)
     swap(vr, to_swap, mem_size);
     // quick sort from left to swap_ptr-1 and swap_ptr+1 to right
     // swap_ptr is the new position of the partition value
-    quick_sort(v, mem_size, left, swap_ptr-1, comp);
+    if(swap_ptr != 0) {
+        quick_sort(v, mem_size, left, swap_ptr-1, comp);
+    }
     quick_sort(v, mem_size, swap_ptr+1, right, comp);
 }
 
@@ -158,6 +160,23 @@ void insertion_sort(void *v, size_t mem_size, size_t n,  int (*comp)(void*, void
         while(j >= 0 && comp(curr, (v + (j*mem_size)))){
             swap(v+((j+1)*mem_size), v+(j*mem_size), mem_size);
             j -= 1;
+        }
+    }
+}
+
+/**
+ *  Generic Implementation of the bubble sort
+ *  Easiest sort to implement probably
+ *  Keep bubbling the biggest number to the end and then decerment the end by 1 since the biggest number is already there,
+ *  then bubble the next biggest number to end (after its been decremented by 1)
+ * 
+**/
+void bubble_sort(void *v, size_t mem_size, size_t n,  int (*comp)(void*, void*)){
+    for(ssize_t i = n - 1 ; i >= 0; i--){
+        for(ssize_t j = 0; j < i; j++){
+            if(!comp(v + (j * mem_size), v + ((j+1) * mem_size))){
+                swap(v+((j+1)*mem_size), v+(j*mem_size), mem_size);
+            }
         }
     }
 }

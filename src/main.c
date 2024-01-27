@@ -17,11 +17,11 @@ int main(void) {
     // };
 
     int (*comparator)(void *, void *) = (int (*)(void *, void *))&int_compare;
-    int arr[6] = {4,8,3,6,1,2};
+    int arr[5] = {4,2,5,6,7};
     
-    insertion_sort(arr, sizeof(int),6, comparator);
-    // merge_sort(arr, sizeof(int),0,  5, comparator);
-    for (size_t i = 0; i <= 5; ++i) {
+    // bubble_sort(arr, sizeof(int),6, comparator);
+    quick_sort(arr, sizeof(int),0, 4, comparator);
+    for (size_t i = 0; i <= 4; ++i) {
         info("element is %d", arr[i]);
     };
 }

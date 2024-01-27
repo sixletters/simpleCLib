@@ -20,7 +20,13 @@ ENTRY_SRCS = src/main.c
 ENTRY_OBJS = $(ENTRY_SRCS:.c=.o)
 ENTRY = bin/main
 
-all: $(LIBRARY) $(ENTRY)
+TEST_SRCS = $(wildcard src/unittest/*.c)
+TEST_OBJS = $(TEST_SRCS:.c=.o)
+# path patsubst follows the following form (patsubst pattern,replacement,text)
+# the following returns the bin/{test_binaries} from src/unittest, by doing wildcard matching
+UNIT_TESTS	= $(patsubst src/unittest/%,bin/%,$(patsubst %.c,%,$(wildcard src/unittest/test_*.c)))
+
+all: $(LIBRARY) $(ENTRY) $(UNIT_TESTS)
 # This means that all files ending in .o will be recompiled when the .c file corresponding or library headers have changed
 # notice that $< is used here instead of $^
 # this means that only one value here is used, which is the first dependant
@@ -36,6 +42,18 @@ $(LIBRARY):	$(LIB_OBJS)
 $(ENTRY): $(ENTRY_OBJS) $(LIBRARY)
 	@echo "Linking $@ with $^"
 	@$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+bin/test_%: src/unittest/test_%.o $(LIBRARY)
+	@echo "Linking $@ with $^"
+	@$(LD) $(LDFLAGS) -o $@ $^
+
+sort_tests: bin/test_sort
+	@for i in $$(seq 0 3); do \
+		echo "running testcase $$i"; \
+		./bin/test_sort $$i; \
+	done
+
+
 
 
 # gcc -S main.c to produce assembly code 
