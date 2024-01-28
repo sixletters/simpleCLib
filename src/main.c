@@ -1,6 +1,20 @@
 #include <stdio.h>
 #include "include/sort.h"
+#include <unistd.h> 
 #include "include/log.h"
+#include "include/str.h"
+
+int puts_manually ( char const s[ static 1]) {
+    FILE * logfile = fopen (" mylog.txt ", "a") ;
+    // this works because C strings are null termianted -> 0
+    for ( size_t i = 0; s[i]; ++i) {
+        if ( fputc(s[i], stdout) == EOF ) return EOF ;
+        fflush(stdout);
+        sleep(2);
+    }
+    if ( fputc('\n', stdout) == EOF ) return EOF ;
+    return 0;
+}
 
 int main(void) {
     // double A[5] = {
@@ -20,8 +34,9 @@ int main(void) {
     int arr[5] = {4,2,5,6,7};
     
     // bubble_sort(arr, sizeof(int),6, comparator);
-    quick_sort(arr, sizeof(int),0, 4, comparator);
-    for (size_t i = 0; i <= 4; ++i) {
-        info("element is %d", arr[i]);
-    };
+    // quick_sort(arr, sizeof(int),0, 4, comparator);
+    // for (size_t i = 0; i <= 4; ++i) {
+    //     info("element is %d", arr[i]);
+    // };
+    puts_manually("HARRIS");
 }

@@ -8,7 +8,6 @@ void sort(int* arr){
 
 void merge(void *v, size_t l , size_t m, size_t r, size_t mem_size, int (*comp)(void*, void*));
 
-
 /**
     Generic implementation of merge sort in c, takes in a comparator function
     The merge sort implementation is as follows
