@@ -28,7 +28,8 @@ TEST_OBJS = $(TEST_SRCS:.c=.o)
 # the following returns the bin/{test_binaries} from src/unittest, by doing wildcard matching
 UNIT_TESTS	= $(patsubst src/unittest/%,bin/%,$(patsubst %.c,%,$(wildcard src/unittest/test_*.c)))
 
-all: $(LIBRARY) $(ENTRY) $(UNIT_TESTS) $(DYNAMIC_LIBRARY)
+# all: $(LIBRARY) $(ENTRY) $(UNIT_TESTS) $(DYNAMIC_LIBRARY)
+all: $(LIBRARY) $(ENTRY) $(UNIT_TESTS)
 # This means that all files ending in .o will be recompiled when the .c file corresponding or library headers have changed
 # notice that $< is used here instead of $^
 # this means that only one value here is used, which is the first dependant
@@ -56,9 +57,9 @@ sort_tests: bin/test_sort
 	done
 
 # This links the library form the lib object files when sfs_lib_objects are recompiled
-$(DYNAMIC_LIBRARY):	$(LIB_OBJS)
-	@echo "dynamically Linking   $@ with $^"
-	@$(CC) $(DYNFLAGS) -o $@ $^
+# $(DYNAMIC_LIBRARY):	$(LIB_OBJS)
+# 	@echo "dynamically Linking   $@ with $^"
+# 	@$(CC) $(DYNFLAGS) -o $@ $^
 
 clean: $(LIB_OBJS) $(ENTRY_OBJS) $(TEST_OBJS)
 	rm $^
