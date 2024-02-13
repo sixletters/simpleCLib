@@ -60,6 +60,16 @@ int puts_manually ( char const s[ static 1]) {
     return 0;
 }
 
+
+typedef union test test;
+
+union test {
+    unsigned char val;
+    unsigned short val1;
+    unsigned char val2[];
+    // unsigned char bytes[sizeof(unsigned)];
+};
+
 int main(void) {
     // double A[5] = {
     //     [0] = 9.0,
@@ -84,9 +94,22 @@ int main(void) {
     // };
     // puts_manually("HARRIS");
     // char inbuf[ms]
-    int x = 1, y = 2;
-    int* x_ptr = &x;
-    int* y_ptr = &y;
-    printf("%d\n", x_ptr);
-    printf("%p\n", (void*)x_ptr);
+    // int x = 1, y = 2;
+    // int* x_ptr = &x;
+    // int* y_ptr = &y;
+    // printf("%d\n", x_ptr);
+    // printf("%p\n", (void*)x_ptr);
+    // test twofold = {
+    //     .val = ((0xAA << ( __CHAR_BIT__ *3) ) |(0xBB << ( __CHAR_BIT__*2) ) |(0xCC << __CHAR_BIT__) |0xDD )
+    // };
+    test twofold = {
+        .val = 'C'
+    };
+    // printf ("size is %d\n", sizeof(unsigned));
+    printf ("size is %d\n", sizeof(test));
+    // for ( size_t i = 0; i < sizeof(twofold.bytes) ; ++i)
+    //     printf (" byte [% zu]: 0x%.02 hhX\n", i, twofold . bytes [i]) ;
+    //     printf (" byte [% zu]: 0x%.02 hhX\n", 0, (char*)(&twofold.val));
+    // for ( size_t i = 0; i < sizeof(twofold.bytes) ; ++i)
+    //     printf (" byte [% zu]: 0x%.02 hhX\n", i, (char*)(&twofold.val) + i);
 }
