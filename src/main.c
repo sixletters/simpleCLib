@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "include/sort.h"
+#include "include/disjoint_set.h"
 #include <unistd.h> 
 #include "include/log.h"
 #include "include/str.h"
@@ -66,7 +67,6 @@ typedef union test test;
 union test {
     unsigned char val;
     unsigned short val1;
-    unsigned char val2[];
     // unsigned char bytes[sizeof(unsigned)];
 };
 
@@ -106,7 +106,13 @@ int main(void) {
         .val = 'C'
     };
     // printf ("size is %d\n", sizeof(unsigned));
-    printf ("size is %d\n", sizeof(test));
+    // printf ("size is %d\n", sizeof(test));
+
+    int test[3] = {0, 1 , 2};
+    intialize_set(test, 3);
+    union_(test, 3, 0, 1);
+    ssize_t val = find(test, 3, 0);
+    printf ("size is %d\n", val);
     // for ( size_t i = 0; i < sizeof(twofold.bytes) ; ++i)
     //     printf (" byte [% zu]: 0x%.02 hhX\n", i, twofold . bytes [i]) ;
     //     printf (" byte [% zu]: 0x%.02 hhX\n", 0, (char*)(&twofold.val));
