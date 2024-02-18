@@ -1,6 +1,11 @@
 {
     "files.associations": {
-        "sort.h": "c"
+        "sort.h": "c",
+        "log.h": "c",
+        "disjoint_set.h": "c",
+        "__bit_reference": "c",
+        "__split_buffer": "c",
+        "vector": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

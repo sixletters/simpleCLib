@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "include/sort.h"
 #include "include/disjoint_set.h"
+#include "include/circular.h"
 #include <unistd.h> 
 #include "include/log.h"
 #include "include/str.h"
@@ -118,4 +119,40 @@ int main(void) {
     //     printf (" byte [% zu]: 0x%.02 hhX\n", 0, (char*)(&twofold.val));
     // for ( size_t i = 0; i < sizeof(twofold.bytes) ; ++i)
     //     printf (" byte [% zu]: 0x%.02 hhX\n", i, (char*)(&twofold.val) + i);
+
+
+    circular* c = circular_new(3);
+    circular_append(c, 1);
+    double val_1 = circular_pop(c);
+    circular_append(c, 2);
+    circular_append(c, 3);
+    circular_append(c, 4);
+    for(size_t i = 0; i < 3; i++){
+        debug("%lf", c->buffer[i]);
+    }
+    debug("HERE");
+    c = circular_resize(c, 4);
+    for(size_t i = 0; i < 4; i++){
+        debug("%lf", c->buffer[i]);
+    }
+    double val_2 = circular_pop(c);
+    double val_3 = circular_pop(c);
+    // debug("%lf", val_1);
+    // debug("%lf", val_2);
+    // debug("%lf", val_3);
+    circular_append(c, 1);
+    circular_append(c, 2);
+    circular_append(c, 3);
+    c = circular_resize(c, 5);
+    debug("HERE");
+    for(size_t i = 0; i < 3; i++){
+        debug("%lf", c->buffer[i]);
+    }
+    debug("%d", c->capacity);
+    val_1 = circular_pop(c);
+    val_2 = circular_pop(c);
+    val_3 = circular_pop(c);
+    debug("%lf", val_1);
+    debug("%lf", val_2);
+    debug("%lf", val_3);
 }

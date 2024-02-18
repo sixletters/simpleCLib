@@ -9,6 +9,8 @@ DYNFLAGS    = -shared
 # ar -rcs is the most likely command you would use 
 # when using a Makefile to compile a library. 
 # r means that if the library already exists, replace the old files within the library with your new files. c means create the library if it did not exist.
+# s means to sort (created a sorted index) the library, so thtat it will be indexed and functions can be accessed faster
+# rcs -> replace, create, sort
 ARFLAGS		= rcs
 
 # Variables
@@ -35,6 +37,7 @@ all: $(LIBRARY) $(ENTRY) $(UNIT_TESTS)
 # this means that only one value here is used, which is the first dependant
 %.o:		%.c $(LIB_HDRS)
 	@echo "Compiling $@ with $^"
+	@echo "$<"
 	@$(CC) $(CFLAGS) -c -fpic -o $@ $<
 
 # This links the library form the lib object files when sfs_lib_objects are recompiled
