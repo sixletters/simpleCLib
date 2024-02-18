@@ -82,11 +82,12 @@ circular* circular_resize(circular* c, size_t n_cap){
         if (n_cap != o_cap){
             size_t o_start = c->start;
             size_t n_start = c->start;
+            size_t delta = n_cap - o_cap;
             double* o_buffer = c->buffer;
             double* n_buffer = c->buffer;
             // two seperate cases have to be handled seperately,
             // the timing at which the reallac is called is crucial
-            if (n_cap > o_cap){
+            if ( delta > 0 ){
                 // case for when there is a capacity increase
                 n_buffer = realloc(o_buffer, sizeof(double[n_cap]));
                 if (!n_buffer) return 0;
@@ -98,11 +99,16 @@ circular* circular_resize(circular* c, size_t n_cap){
                     size_t ilen = len - ulen;
                     // basically if there is room for the second half in the added capacity, move the wrap around down
                     // if not then move the first half to the end and set start
-                    if (ilen <= (n_cap - o_cap)) {
+                    if (ilen <= delta) {
+                        // will not overlap so safe to use memcpy here
                         memcpy(n_buffer+o_cap, n_buffer, ilen * sizeof ( double ));
                     } else{
+                        // might have overlap so we have to use memmove
+                        // for example, when we wanna shift 2, 3 down by one to beomc _, 2, 3
+                        // there is overlaps in 2's new position and 3's old position, if we copied 2 to 3's position
+                        // first it could end up as _, 2, 2.
                         n_start = (n_cap -  ulen);
-                        memcpy(n_buffer+n_start, n_buffer + o_start, ulen * sizeof ( double ));
+                        memmove(n_buffer+n_start, n_buffer + o_start, ulen * sizeof ( double ));
                     }
                 }
             }else{
@@ -111,9 +117,11 @@ circular* circular_resize(circular* c, size_t n_cap){
                 if(o_start + len > o_cap) {
                     // num in first 
                     size_t ulen = o_cap - o_start;
-                    // we have to shift the first half back by delta
-                    n_start = o_start - (o_cap - n_cap);
-                    memcpy(o_buffer + n_start, o_buffer + o_start, sizeof(double) * ulen);
+                    // we have to shift the first half back by delta, delta is negative in this case
+                    // 3 -5 = -2
+                    // use memmove, because it definitely might/will overlap.
+                    n_start = o_start + delta;
+                    memmove(o_buffer + n_start, o_buffer + o_start, sizeof(double) * ulen);
                 }
                 // case for when there is a capacity increase
                 n_buffer = realloc(o_buffer, sizeof(double[n_cap]));
