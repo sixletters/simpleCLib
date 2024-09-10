@@ -5,7 +5,9 @@
         "disjoint_set.h": "c",
         "__bit_reference": "c",
         "__split_buffer": "c",
-        "vector": "c"
+        "vector": "c",
+        "fcntl.h": "c",
+        "assert.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
